@@ -1,2 +1,5 @@
-# Turing_Maching
- 
+# Turing Machine
+
+# TODO
+Create main
+Create 
