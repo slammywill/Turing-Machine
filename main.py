@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+import automata
 
 
 class TuringMachine:
@@ -7,6 +8,7 @@ class TuringMachine:
     def __init__(self):
         self._running = False
         self.size = self.width, self.height = 1280, 720
+        self.automata = automata.Automata("01")
 
     def on_init(self):
         pygame.init()
