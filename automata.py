@@ -5,6 +5,7 @@ import pygame
 class State:
     """Defines a state that the automata can be in.
     """
+
     def __init__(self, position, name="", transitions=[]):
         """State constructor.
 
@@ -17,7 +18,7 @@ class State:
         self.transitions = transitions
         self.position = position
         self.font = pygame.font.Font('freesansbold.ttf', 14)
-        self.text = self.create_label(name)
+        self.text = self.create_label()
 
     def add_transition(self, transition):
         """Adds a transition to the state.
@@ -84,6 +85,10 @@ class Transition:
 class Automata:
     """Defines the automata that has states and transitions.
     """
+
+    S_RADIUS = 25
+    S_WIDTH = 2
+
     def __init__(self, alphabet):
         """Automata constructor.
 
@@ -95,14 +100,13 @@ class Automata:
         self.alphabet = alphabet
 
 
-    def add_state(self, state):
-        """Adds a new state to the automata.
-
-        Args:
-            state (State): The new state.
+    def add_state(self):
+        """Adds a state to the automata at the position of the mouse with name being its position
+        in the state list.
         """
-        self.states.append(state)
-    
+        pos = pygame.mouse.get_pos()
+        self.states.append(State(pos, str(len(self.states))))
+
 
     def on_draw(self, surface):
         """Draws all of the states and transitions.
@@ -112,5 +116,5 @@ class Automata:
         """
         for state in self.states:
             pygame.draw.circle(surface, color="black", center=state.position,
-                               radius=20, width=2)
+                               radius=self.S_RADIUS, width=self.S_WIDTH)
             surface.blit(state.text[0], state.text[1])

@@ -10,8 +10,6 @@ class TuringMachine:
         """
         self._running = False
         self.size = self.width, self.height = 1280, 720
-        self.automata = Automata("01")
-        self.automata.add_state(State((100, 100), "q0"))
 
 
     def on_init(self):
@@ -20,6 +18,7 @@ class TuringMachine:
         pygame.init()
         pygame.display.set_caption('Turing Machine')
         self._display_surf = pygame.display.set_mode(self.size, pygame.HWSURFACE | pygame.DOUBLEBUF)
+        self.automata = Automata("01")
         self._running = True
 
 
@@ -31,6 +30,14 @@ class TuringMachine:
         """
         if event.type == pygame.QUIT:
             self._running = False
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_s:
+                self.automata.add_state()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            left, middle, right = pygame.mouse.get_pressed()
+            if left:
+                pass
+
 
 
     def on_loop(self):
@@ -44,12 +51,11 @@ class TuringMachine:
         """
         self._display_surf.fill("white")
         self.automata.on_draw(self._display_surf)
-        pygame.draw.circle(self._display_surf, "black", (200, 100), 10, 1)
         pygame.display.flip()
 
 
     def on_cleanup(self):
-        """Runs after each loop to cleanup things.
+        """Runs when the application is closed.
         """
         pygame.quit()
 
