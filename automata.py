@@ -1,18 +1,23 @@
 import re
+import pygame
 
 
 class State:
     """Defines a state that the automata can be in.
     """
-    def __init__(self, name="", transitions=[]):
+    def __init__(self, position, name="", transitions=[]):
         """State constructor.
 
         Args:
-            name (str, optional): The name of the state. Defaults to "".
-            transitions (list, optional): The list of transitions to give to the state. Defaults to [].
+            position    (tuple):            The x and y position tuple of the state.   
+            name        (str, optional):    The name of the state. Defaults to "".
+            transitions (list, optional):   The list of transitions to give to the state. Defaults to [].
         """
         self.name = name
         self.transitions = transitions
+        self.position = position
+        self.font = pygame.font.Font('freesansbold.ttf', 14)
+        self.text = self.create_label(name)
 
     def add_transition(self, transition):
         """Adds a transition to the state.
@@ -21,6 +26,18 @@ class State:
             transition (Transition): The transition to be added.
         """
         self.transitions.append(transition)
+    
+
+    def create_label(self):
+        """Creates the name label of the state.
+
+        Returns:
+            tuple: The text and its bounding rectangle.
+        """
+        text = self.font.render(self.name, True, "black")
+        textRect = text.get_rect()
+        textRect.center = self.position
+        return (text, textRect)
 
 
 class Transition:
@@ -61,6 +78,7 @@ class Transition:
                 ruledict[read] = (write, direction)
 
             return Transition(in_state, ruledict)
+    
 
 
 class Automata:
@@ -76,3 +94,23 @@ class Automata:
         self.current_state = None
         self.alphabet = alphabet
 
+
+    def add_state(self, state):
+        """Adds a new state to the automata.
+
+        Args:
+            state (State): The new state.
+        """
+        self.states.append(state)
+    
+
+    def on_draw(self, surface):
+        """Draws all of the states and transitions.
+
+        Args:
+            surface (Surface): The pygame surface that is being drawn onto.
+        """
+        for state in self.states:
+            pygame.draw.circle(surface, color="black", center=state.position,
+                               radius=20, width=2)
+            surface.blit(state.text[0], state.text[1])
