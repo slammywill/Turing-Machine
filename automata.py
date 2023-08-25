@@ -115,6 +115,10 @@ class Automata:
             surface (Surface): The pygame surface that is being drawn onto.
         """
         for state in self.states:
+            # Inside colour.
+            pygame.draw.circle(surface, color="gray", center=state.position,
+                               radius=self.S_RADIUS, width=0)
+            # Border.
             pygame.draw.circle(surface, color="black", center=state.position,
                                radius=self.S_RADIUS, width=self.S_WIDTH)
             surface.blit(state.text[0], state.text[1])
