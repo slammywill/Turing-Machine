@@ -1,5 +1,6 @@
 import pygame
 from State import State
+from Transition import Transition
 from typing import Optional
 
 class Automata:
@@ -27,7 +28,8 @@ class Automata:
         in the state list.
         """
         pos = pygame.mouse.get_pos()
-        self.states.append(State(pos, str(len(self.states))))
+        new_state = State(pos, [], str(len(self.states)))
+        self.states.append(new_state)
 
 
     def on_draw(self, surface: pygame.Surface):
@@ -42,7 +44,11 @@ class Automata:
             if self.adding_transition:
                 pygame.draw.aaline(surface, "black", selected_pos, mouse_pos)
 
+        for state in self.states:
+            for transition, to_state in state.transitions:
+                pygame.draw.aaline(surface, "black", state.position, to_state.position)
 
+        # Draw states
         for state in self.states:
             if state == self.selected_state:
                 state.set_visually_selected(True)
@@ -60,14 +66,23 @@ class Automata:
 
     def handle_click(self, mouse_pos):
         """Handles a users click."""
-        state_clicked = False
+        state_clicked = None
         for state in self.states:
             dist = ((state.position[0] - mouse_pos[0])**2 + (state.position[1] - mouse_pos[1])**2)**0.5
             if (dist <= Automata.S_RADIUS):
-                self.selected_state = state
-                state_clicked = True
+                state_clicked = state
+
+        if self.adding_transition and self.selected_state is not None and state_clicked is not None:
+            self.selected_state.add_transition(Transition.create_transition("", self.alphabet), state_clicked)
+            self.toggle_adding_transition()
+
         if not state_clicked:
             self.selected_state = None
+        else:
+            self.selected_state = state_clicked
+        for state in self.states:
+            print(state)
+        
 
 
     def toggle_adding_transition(self):

@@ -13,12 +13,15 @@ class Transition:
         """
         self.rules = rules
 
+    def __str__(self):
+        return "Transition - Rules: {self.rules}"
+
+
     @staticmethod
     def create_transition(rule: str, alphabet: str):
         """Creates a new transition.
 
         Args:
-            in_state    (State):    The state that transition will go to.
             rule        (str):      The string rule to be followed containing each transition under some symbol of the alphabet.
             alphabet    (str):      The string containng all characters of the alphabet.
 

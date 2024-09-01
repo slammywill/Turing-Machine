@@ -1,11 +1,12 @@
 import pygame
 from Transition import Transition
+from typing import List, Tuple
 
 class State:
     """Defines a state that the automata can be in.
     """
 
-    def __init__(self, position: tuple, name="", transitions=[]):
+    def __init__(self, position: Tuple[int, int], transitions: List[Tuple['Transition', 'State']], name: str = ""):
         """State constructor.
 
         Args:
@@ -21,13 +22,24 @@ class State:
         self.font = pygame.font.Font('freesansbold.ttf', 14)
         self.text = self.create_label()
 
-    def add_transition(self, transition: Transition):
+
+    def __str__(self):
+        output = f"State {self.name}\n  Position: {self.position}\n  Transitions:\n"
+        if len(self.transitions) == 0:
+            output += "    None"
+        else:
+            for transition in self.transitions:
+                output += f"    State {transition[1].name}"
+        return output
+
+
+    def add_transition(self, transition: 'Transition', to_state: 'State'):
         """Adds a transition to the state.
 
         Args:
             transition (Transition): The transition to be added.
         """
-        self.transitions.append(transition)
+        self.transitions.append((transition, to_state))
     
 
     def create_label(self):
